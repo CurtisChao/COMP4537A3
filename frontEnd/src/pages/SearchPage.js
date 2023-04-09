@@ -1,9 +1,7 @@
 import React from "react";
 import axios from "axios";
-
 import Search from "../components/Search";
 import Result from "../components/Result";
-
 import styles from "./SearchPage.module.css";
 
 import { useState, useEffect, useContext } from "react";
