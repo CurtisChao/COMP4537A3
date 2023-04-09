@@ -1,28 +1,49 @@
-import React, { useEffect, useState } from 'react'
+import React from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-function Search({ types, checkedState, setCheckedState }) {
+function Search({ selectedTypes, setSelectedTypes, setSearchName }) {
+  const [types, setTypes] = useState([]);
 
-  const onChangeHandle = (type) => {
-    const index = types.current.indexOf(type);
-    const newCheckedState = checkedState.map((item, i) => i === index ? !item : item);
-    setCheckedState(newCheckedState);
-  }
+  useEffect(() => {
+    async function fetchData() {
+      const res = await axios.get(
+        "https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/types.json"
+      );
+      setTypes(res.data.map((type) => type.english));
+    }
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setSelectedTypes([...selectedTypes, value]);
+    } else {
+      setSelectedTypes(selectedTypes.filter((type) => type !== value));
+    }
+  };
 
   return (
-    <div>
-      {
-        types.current.map(type => {
-          return (
-            <span key={type}>
-              <input type="checkbox" name="pokeTypes" value={type} id={type} onChange={() => { onChangeHandle(type) }} />
-              <label htmlFor={type}>{type}</label>
-              <br />
-            </span>
-          )
-        })
-      }
-    </div>
-  )
+    <>
+        {types.map((type) => (
+          <div>
+            <input
+              type="checkbox"
+              value={type}
+              id={type}
+              onChange={handleChange}
+            />
+            <label htmlFor={type}>{type} </label>
+          </div>
+        ))}
+
+      <input
+        type="text"
+        placeHolder="Filter Pokemon by name"
+      />
+    </>
+  );
 }
 
-export default Search
+export default Search;
