@@ -31,18 +31,28 @@ const app = express()
 var pokeModel = null;
 
 const start = asyncWrapper(async () => {
-  await connectDB({ "drop": false });
+  await connectDB({ drop: false });
   const pokeSchema = await getTypes();
   // pokeModel = await populatePokemons(pokeSchema);
-  pokeModel = mongoose.model('pokemons', pokeSchema);
+  pokeModel = mongoose.model("pokemons", pokeSchema);
 
   app.listen(process.env.pokeServerPORT, (err) => {
-    if (err)
-      throw new PokemonDbError(err)
+    if (err) throw new PokemonDbError(err);
     else
-      console.log(`Phew! Server is running on port: ${process.env.pokeServerPORT}`);
-  })
-})
+      console.log(
+        `Phew! Server is running on port: ${process.env.pokeServerPORT}`
+      );
+  });
+
+  const doc = await userModel.findOne({ username: "admin" });
+  if (!doc)
+    userModel.create({
+      username: "admin",
+      password: bcrypt.hashSync("admin", 10),
+      role: "admin",
+      email: "admin@admin.ca",
+    });
+});
 start();
 app.use(express.json());
 app.use(cors());
@@ -222,6 +232,8 @@ app.post(
     res.send(user);
   })
 );
+
+app.use(authUser);
 
 
 app.use(authUser) // Boom! All routes below this line are protected
