@@ -51,6 +51,11 @@ function Result({ selectedTypes, searchName, allPokemon }) {
 
   return (
     <>
+      <Page
+        selectedTypes={selectedTypes}
+        currentPokemons={currentPokemons}
+        currentPage={currentPage}
+      />
       <Pagination
         numberOfPages={numberOfPages}
         currentPage={currentPage}
