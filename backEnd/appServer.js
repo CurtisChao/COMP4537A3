@@ -43,7 +43,9 @@ const start = asyncWrapper(async () => {
       console.log(`Phew! Server is running on port: ${process.env.pokeServerPORT}`);
   })
 })
-start()
+start();
+app.use(express.json());
+app.use(cors());
 
 const authUser = asyncWrapper(async (req, res, next) => {
   // const token = req.body.appid
@@ -83,13 +85,29 @@ const authUser = asyncWrapper(async (req, res, next) => {
   }
 });
 
+const bcrypt = require("bcrypt");
+
+const jwt = require("jsonwebtoken");
+// const { findOne } = require("./userModel.js")
+const userModel = require("./userModel.js");
+
+// app.use(morgan("tiny"))
+app.use(morgan(":method"));
+
 const authAdmin = asyncWrapper(async (req, res, next) => {
-  const user = await userModel.findOne({ token: req.query.appid })
-  if (user.role !== "admin") {
-    throw new PokemonAuthError("Access denied")
+  const [prefix, token] = req.header("authorization").split(" ");
+  let payload;
+  if (prefix == "Bearer") {
+    payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  } else {
+    payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
   }
-  next()
-})
+
+  if (payload?.user?.role === "admin") {
+    return next();
+  }
+  throw new PokemonAuthError("Access denied");
+});
 
 
 
