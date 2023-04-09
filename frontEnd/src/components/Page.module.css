@@ -1,0 +1,16 @@
+.pokemonList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+  }
+  .pokemonList img {
+    cursor: pointer;
+    display: inline-block;
+    width: 76%;
+    margin-right: 2%;
+    justify-self: center;
+  }
+  
+  .pokemonList img:last-child {
+    margin-right: 0;
+  }
