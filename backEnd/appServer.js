@@ -250,7 +250,7 @@ app.post(
 );
 
 app.use(authUser);
-
+app.use(logApiUsage);
 
 app.use(authUser) // Boom! All routes below this line are protected
 
@@ -280,6 +280,12 @@ app.get(
   })
 );
 
+app.get("*", (req, res) => {
+  res.json({
+    msg: "Improper route. Check API docs plz."
+  })
+  throw new PokemonNoSuchRouteError("");
+})
 
 
 app.use(handleErr)
