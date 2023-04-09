@@ -44,29 +44,44 @@ const start = asyncWrapper(async () => {
   })
 })
 start()
-app.use(express.json())
-const jwt = require("jsonwebtoken")
-// const { findOne } = require("./userModel.js")
-const userModel = require("./userModel.js")
 
 const authUser = asyncWrapper(async (req, res, next) => {
-  // const to ken = req.header('auth-token')
-  const token = req.query.appid
-  if (!token) {
-    throw new PokemonAuthError("No Token: Please provide an appid query parameter.")
+  // const token = req.body.appid
+  if (!req.header("authorization")) {
+    throw new PokemonAuthError("No Token: Please provide a token.");
   }
-  const userWithToken = await userModel.findOne({ token })
-  if (!userWithToken || userWithToken.token_invalid) {
-    throw new PokemonAuthError("Please Login.")
+  const [prefix, token] = req.header("authorization").split(" ");
+
+  if (!token || (prefix != "Bearer" && prefix != "Refresh")) {
+    // throw new PokemonAuthError("No Token: Please provide an appid query parameter.")
+    throw new PokemonAuthError(
+      "No Token: Please provide the token using the headers."
+    );
   }
   try {
-    // console.log("token: ", token);
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET) // nothing happens if token is valid
-    next()
+    let verified;
+    if (prefix == "Bearer") {
+      verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    } else {
+      verified = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    }
+
+    //check if the token is marked as invalid in database
+    const authedUser = await userModel.findOne({
+      username: verified.user.username,
+    });
+
+    const isInvalid = authedUser.token_invalid;
+
+    if (isInvalid || !authedUser.token_invalid == undefined) {
+      throw new PokemonAuthError("Invalid Token Verification. Log in again.");
+    }
+
+    next();
   } catch (err) {
-    throw new PokemonAuthError("Invalid user.")
+    throw new PokemonAuthError("Invalid Token Verification. Log in again.");
   }
-})
+});
 
 const authAdmin = asyncWrapper(async (req, res, next) => {
   const user = await userModel.findOne({ token: req.query.appid })
