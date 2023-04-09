@@ -123,6 +123,57 @@ app.post(
 );
 
 
+app.post(
+  "/requestNewAccessToken",
+  asyncWrapper(async (req, res) => {
+    // console.log(req.headers);
+    if (!req.header("authorization"))
+      throw new PokemonAuthError("No Token: Please provide a token.");
+    const [prefix, refreshToken] = req.header("authorization").split(" ");
+    if (!refreshToken || prefix != "Refresh") {
+      throw new PokemonAuthError("No Token: Please provide a token.");
+    }
+
+    //Get all refresh tokens from the database
+    const users = await userModel.find({});
+    const refreshTokens = users.map((user) => {
+      if (!user.token_invalid) {
+        return user.token;
+      }
+    });
+
+    if (!refreshTokens.includes(refreshToken)) {
+      // replaced a db access
+      console.log("auth", req.header("authorization"));
+      console.log("token: ", refreshToken);
+      console.log("refreshTokens", refreshTokens);
+      throw new PokemonAuthError(
+        "Invalid Token: Please provide a valid token."
+      );
+    }
+    try {
+      const payload = await jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+      const accessToken = jwt.sign(
+        { user: payload.user },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "10s" }
+      );
+      res.header(
+        "authorization",
+        `Bearer ${accessToken} Refresh ${refreshToken}`
+      );
+      res.send("All good!");
+    } catch (error) {
+      throw new PokemonAuthError(
+        "Invalid Token: Please provide a valid token."
+      );
+    }
+  })
+);
+
 // app.use(morgan("tiny"))
 app.use(morgan(":method"))
 
@@ -130,6 +181,7 @@ app.use(cors())
 
 
 app.use(authUser) // Boom! All routes below this line are protected
+
 app.get('/api/v1/pokemons', asyncWrapper(async (req, res) => {
   if (!req.query["count"])
     req.query["count"] = 10
