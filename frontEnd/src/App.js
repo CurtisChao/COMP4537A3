@@ -7,6 +7,7 @@ import axios from 'axios'
 import SearchPage from "./pages/SearchPage";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
+import UserContext from "./context/UserContext";
 
 function App() {
   const auth = useAuth();
