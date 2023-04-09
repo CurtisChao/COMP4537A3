@@ -291,7 +291,7 @@ app.use(authAdmin);
 
 app.use(handleErr);
 
-// Get all users
+
 app.get(
   "/api/v1/admin/uniqueUsers",
   asyncWrapper(async (req, res) => {
@@ -299,6 +299,23 @@ app.get(
     const allLogs = await apiLogModel.find({});
     const uniqueUsers = [...new Set(allLogs.map((log) => log.user))];
     res.json(uniqueUsers);
+  })
+);
+
+app.get(
+  "/api/v1/admin/topUsers",
+  asyncWrapper(async (req, res) => {
+    // const { start, end } = req.query;
+    const topUsers = await apiLogModel
+      .aggregate([
+        // {
+        //   $match: { timestamp: { $gte: new Date(start), $lte: new Date(end) } },
+        // },
+        { $group: { _id: "$user", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ])
+      .limit(5);
+    res.json(topUsers);
   })
 );
 
