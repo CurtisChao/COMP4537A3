@@ -30,7 +30,6 @@ function App() {
         numberOfPages={numberOfPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        style={{paddingLeft:20, paddingRight:20}}
       />
     </>
   )
