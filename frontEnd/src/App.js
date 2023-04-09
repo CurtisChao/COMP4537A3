@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Page from './Page'
 import Pagination from './Pagination';
 import axios from 'axios'
+import SearchPage from "./pages/SearchPage";
 function App() {
   const [pokemons, setPokemons] = useState([])
 
@@ -31,6 +32,7 @@ function App() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
+      <SearchPage></SearchPage>
     </>
   )
 }

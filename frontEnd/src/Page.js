@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from "./Page.module.css";
 
+import SearchPage from "./pages/SearchPage"
+
 function Page({ currentPokemons, currentPage }) {
 
 const getUrl = (id) => {
