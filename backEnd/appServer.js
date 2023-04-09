@@ -179,6 +179,50 @@ app.use(morgan(":method"))
 
 app.use(cors())
 
+app.post(
+  "/login",
+  asyncWrapper(async (req, res) => {
+    const { username, password } = req.body;
+    console.log("username: ", username);
+    const user = await userModel.findOne({ username });
+    console.log("user: ", user);
+    if (!user) throw new PokemonAuthError("User not found");
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) throw new PokemonAuthError("Password is incorrect");
+
+    const userWithoutToken = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+
+    const accessToken = jwt.sign(
+      { user: userWithoutToken },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "10s" }
+    );
+    const refreshToken = jwt.sign(
+      { user: userWithoutToken },
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    await userModel.updateOne(
+      { username: user.username },
+      { token: refreshToken, token_invalid: false }
+    );
+
+    res.header(
+      "authorization",
+      `Bearer ${accessToken} Refresh ${refreshToken}`
+    );
+
+    // res.send("All good!")
+    res.send(user);
+  })
+);
+
 
 app.use(authUser) // Boom! All routes below this line are protected
 
