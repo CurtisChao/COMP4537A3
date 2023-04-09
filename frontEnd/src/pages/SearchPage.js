@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Search from "../components/Search";
+import Result from "../components/Result";
 
 import { useState, useEffect, useContext } from "react";
 
@@ -43,6 +44,12 @@ function SearchPage() {
                   selectedTypes={selectedTypes}
                   setSelectedTypes={setSelectedTypes}
                   setSearchName={setSearchName}
+              />
+              <Result
+                  selectedTypes={selectedTypes}
+                  searchName={searchName}
+                  allPokemon={allPokemon}
+                  loading={loading}
               />
             </div>
         )}
