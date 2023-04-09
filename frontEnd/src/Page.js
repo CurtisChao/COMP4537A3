@@ -1,46 +1,50 @@
-import React from 'react'
+import React from "react";
+import Popup from "./Popup";
+import { useState } from "react";
+
 import styles from "./Page.module.css";
 
-import SearchPage from "./pages/SearchPage"
+function Page({ currentPokemons, selectedTypes, currentPage }) {
+  const [popupInfo, setPopupInfo] = useState({ visible: false, content: {} });
 
-function Page({ currentPokemons, currentPage }) {
-
-const getUrl = (id) => {
+  const getUrl = (id) => {
     if (id < 10)
-        return `https://github.com/fanzeyi/pokemon.json/raw/master/images/00${id}.png`;
+      return `https://github.com/fanzeyi/pokemon.json/raw/master/images/00${id}.png`;
     if (id < 100)
-        return `https://github.com/fanzeyi/pokemon.json/raw/master/images/0${id}.png`;
+      return `https://github.com/fanzeyi/pokemon.json/raw/master/images/0${id}.png`;
     return `https://github.com/fanzeyi/pokemon.json/raw/master/images/${id}.png`;
-    };
+  };
+
+  const handleImageClick = (imageInfo) => {
+    setPopupInfo({ visible: true, content: imageInfo });
+  };
 
   return (
-    <div>
-      {
-        // currentPokemons.map(item => {
-        //   return <div>  {item.name.english} id is {item.id}               
-        //   <img
-        //   src={getUrl(item.id)}
-        //   alt={item.name.english}/>
-        //   </div>
-        // })
-        <div className="pokemon-list" style={{paddingLeft:20, paddingRight:20}}>
+    <>
+      {popupInfo.visible && (
+        <Popup
+          info={popupInfo.content}
+          onClose={() => setPopupInfo({ visible: false, content: {} })}
+        />
+      )}
+      <div className="pokemon-list">
         <h1>{`Page Number ${currentPage}`}</h1>
         <div className={styles.pokemonList}>
           {currentPokemons.map((item) => {
-            // if (selectedTypes.every((type) => item.type.includes(type)))
-            //   item.url = getUrl(item.id);
+            if (selectedTypes.every((type) => item.type.includes(type)))
+              item.url = getUrl(item.id);
             return (
               <img
                 src={getUrl(item.id)}
                 alt={item.name.english}
+                onClick={() => handleImageClick(item)}
               />
             );
           })}
         </div>
       </div>
-      }
-    </div>
-  )
+    </>
+  );
 }
 
-export default Page
+export default Page;

@@ -1,5 +1,8 @@
 import React from "react";
+import Popup from "./Popup";
 import { useState } from "react";
+
+import styles from "./Page.module.css";
 
 function Page({ currentPokemons, selectedTypes, currentPage }) {
   const [popupInfo, setPopupInfo] = useState({ visible: false, content: {} });
@@ -13,13 +16,20 @@ function Page({ currentPokemons, selectedTypes, currentPage }) {
   };
 
   const handleImageClick = (imageInfo) => {
+    setPopupInfo({ visible: true, content: imageInfo });
   };
 
   return (
     <>
+      {popupInfo.visible && (
+        <Popup
+          info={popupInfo.content}
+          onClose={() => setPopupInfo({ visible: false, content: {} })}
+        />
+      )}
       <div className="pokemon-list">
         <h1>{`Page Number ${currentPage}`}</h1>
-        <div>
+        <div className={styles.pokemonList}>
           {currentPokemons.map((item) => {
             if (selectedTypes.every((type) => item.type.includes(type)))
               item.url = getUrl(item.id);
