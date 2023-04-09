@@ -3,6 +3,8 @@ import Page from './Page'
 import Pagination from './Pagination';
 import axios from 'axios'
 import SearchPage from "./pages/SearchPage";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+
 function App() {
   const [pokemons, setPokemons] = useState([])
 
@@ -26,12 +28,14 @@ function App() {
   return (
 
     <>
+      <BrowserRouter>
       < Page currentPokemons={currentPokemons} currentPage={currentPage} />
       < Pagination
         numberOfPages={numberOfPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
+      </BrowserRouter>
       <SearchPage></SearchPage>
     </>
   )
