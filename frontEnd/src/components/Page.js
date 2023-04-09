@@ -1,6 +1,6 @@
 import React from "react";
-import Popup from "./Popup";
 import { useState } from "react";
+import Popup from "./Popup";
 
 import styles from "./Page.module.css";
 
