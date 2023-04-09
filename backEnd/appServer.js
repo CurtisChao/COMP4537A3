@@ -47,6 +47,15 @@ start();
 app.use(express.json());
 app.use(cors());
 
+const bcrypt = require("bcrypt");
+
+const jwt = require("jsonwebtoken");
+// const { findOne } = require("./userModel.js")
+const userModel = require("./userModel.js");
+
+// app.use(morgan("tiny"))
+app.use(morgan(":method"));
+
 const authUser = asyncWrapper(async (req, res, next) => {
   // const token = req.body.appid
   if (!req.header("authorization")) {
@@ -85,15 +94,6 @@ const authUser = asyncWrapper(async (req, res, next) => {
   }
 });
 
-const bcrypt = require("bcrypt");
-
-const jwt = require("jsonwebtoken");
-// const { findOne } = require("./userModel.js")
-const userModel = require("./userModel.js");
-
-// app.use(morgan("tiny"))
-app.use(morgan(":method"));
-
 const authAdmin = asyncWrapper(async (req, res, next) => {
   const [prefix, token] = req.header("authorization").split(" ");
   let payload;
@@ -109,6 +109,18 @@ const authAdmin = asyncWrapper(async (req, res, next) => {
   throw new PokemonAuthError("Access denied");
 });
 
+app.post(
+  "/register",
+  asyncWrapper(async (req, res) => {
+    const { username, password, email } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const userWithHashedPassword = { ...req.body, password: hashedPassword };
+
+    const user = await userModel.create(userWithHashedPassword);
+    res.send(user);
+  })
+);
 
 
 // app.use(morgan("tiny"))
