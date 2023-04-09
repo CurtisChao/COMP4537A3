@@ -335,5 +335,18 @@ app.get(
   })
 );
 
+// 4xx Errors By Endpoint
+app.get(
+  "/api/v1/admin/errorsByEndpoint",
+  asyncWrapper(async (req, res) => {
+    const errorsByEndpoint = await apiLogModel.aggregate([
+      { $match: { status: { $gte: 400, $lt: 500 } } },
+      { $group: { _id: "$endpoint", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+    res.json(errorsByEndpoint);
+  })
+);
+
 app.use(handleErr)
 module.exports = app;
