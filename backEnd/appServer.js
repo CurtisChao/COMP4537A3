@@ -226,6 +226,22 @@ app.post(
 
 app.use(authUser) // Boom! All routes below this line are protected
 
+app.post(
+  "/logout",
+  asyncWrapper(async (req, res) => {
+    const tokens = req.header("authorization").split(" ");
+    const refreshToken = tokens[1];
+    const user = await userModel.findOne({ token: refreshToken });
+    if (!user) {
+      throw new PokemonAuthError("User not found");
+    }
+    await userModel.updateOne({ token: user.token, token_invalid: true });
+
+    const user1 = await userModel.findOne({ token: refreshToken });
+    res.send("Logged out");
+  })
+);
+
 app.get('/api/v1/pokemons', asyncWrapper(async (req, res) => {
   if (!req.query["count"])
     req.query["count"] = 10
