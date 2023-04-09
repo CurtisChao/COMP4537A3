@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Page from './Page'
-import Pagination from './Pagination';
 import axios from 'axios'
 import SearchPage from "./pages/SearchPage";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
