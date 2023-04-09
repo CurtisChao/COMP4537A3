@@ -36,7 +36,6 @@ function App() {
         setCurrentPage={setCurrentPage}
       />
       </BrowserRouter>
-      <SearchPage></SearchPage>
     </>
   )
 }
