@@ -319,6 +319,21 @@ app.get(
   })
 );
 
+app.get(
+  "/api/v1/admin/topUsersPerEndpoint",
+  asyncWrapper(async (req, res) => {
+    const topUsersPerEndpoint = await apiLogModel.aggregate([
+      {
+        $group: {
+          _id: { user: "$user", endpoint: "$endpoint" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+    res.json(topUsersPerEndpoint);
+  })
+);
 
 app.use(handleErr)
 module.exports = app;
