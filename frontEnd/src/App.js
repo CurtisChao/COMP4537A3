@@ -23,12 +23,14 @@ function App() {
   const numberOfPages = Math.ceil(pokemons.length / pokemonsPerPage);
 
   return (
+
     <>
       < Page currentPokemons={currentPokemons} currentPage={currentPage} />
       < Pagination
         numberOfPages={numberOfPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        style={{paddingLeft:20, paddingRight:20}}
       />
     </>
   )
