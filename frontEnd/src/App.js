@@ -1,29 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Page from './Page'
 import Pagination from './Pagination';
 import axios from 'axios'
 import SearchPage from "./pages/SearchPage";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import useAuth from "./hooks/useAuth";
 
 function App() {
-  const [pokemons, setPokemons] = useState([])
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pokemonsPerPage] = useState(10);
+  const auth = useAuth();
+  const [loggedIn, setLoggedIn] = useState(Boolean(auth.token));
 
   useEffect(() => {
-    axios.get('https://raw.githubusercontent.com/fanzeyi/pokemon.json/master/pokedex.json')
-      .then(res => res.data)
-      .then(res => {
-        setPokemons(res)
-      })
-      .catch(err => console.log("err", err))
-  }, [])
-
-  const indexOfLastRecord = currentPage * pokemonsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - pokemonsPerPage;
-  const currentPokemons = pokemons.slice(indexOfFirstRecord, indexOfLastRecord)
-  const numberOfPages = Math.ceil(pokemons.length / pokemonsPerPage);
+    setLoggedIn(Boolean(auth.token));
+  }, [auth.token]);
 
   return (
 
