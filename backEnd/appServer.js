@@ -287,5 +287,21 @@ app.get("*", (req, res) => {
   throw new PokemonNoSuchRouteError("");
 })
 
+app.use(authAdmin);
+
+app.use(handleErr);
+
+// Get all users
+app.get(
+  "/api/v1/admin/uniqueUsers",
+  asyncWrapper(async (req, res) => {
+    // const { start, end } = req.query;
+    const allLogs = await apiLogModel.find({});
+    const uniqueUsers = [...new Set(allLogs.map((log) => log.user))];
+    res.json(uniqueUsers);
+  })
+);
+
 
 app.use(handleErr)
+module.exports = app;
