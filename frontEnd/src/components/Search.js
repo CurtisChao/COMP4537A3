@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+import styles from "./Search.module.css";
+
 function Search({ selectedTypes, setSelectedTypes, setSearchName }) {
   const [types, setTypes] = useState([]);
 
@@ -26,6 +28,7 @@ function Search({ selectedTypes, setSelectedTypes, setSearchName }) {
 
   return (
     <>
+    <div className={styles.checkbox}>
         {types.map((type) => (
           <div>
             <input
@@ -37,10 +40,11 @@ function Search({ selectedTypes, setSelectedTypes, setSearchName }) {
             <label htmlFor={type}>{type} </label>
           </div>
         ))}
-
+    </div>
       <input
         type="text"
         placeHolder="Filter Pokemon by name"
+        className={styles.searchBar}
       />
     </>
   );

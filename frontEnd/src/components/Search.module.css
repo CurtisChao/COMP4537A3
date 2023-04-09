@@ -1,0 +1,9 @@
+.checkbox {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    
+  }
+  .searchBar {
+    margin-top: 10px;
+  }
