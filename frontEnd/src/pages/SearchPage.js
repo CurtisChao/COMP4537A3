@@ -3,7 +3,6 @@ import axios from "axios";
 import Search from "../components/Search";
 import Result from "../components/Result";
 import styles from "./SearchPage.module.css";
-
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
@@ -47,35 +46,37 @@ function SearchPage() {
   };
 
   return (
-      <>
-        {loading ? (
-            <p>Loading...</p>
-        ) : (
-            <div className={styles.container}>
-              <button onClick={() => navigate("/report")}>Report</button>
-              <Search
+    <>
+      {loading ? (
+          <p>Loading...</p>
+      ) : (
+          <div className={styles.container}>
+            {localStorage.getItem("role") === "admin" && (
+                <button onClick={() => navigate("/report")}>Report</button>
+            )}
+            <Search
+                selectedTypes={selectedTypes}
+                setSelectedTypes={setSelectedTypes}
+                setSearchName={setSearchName}
+            />
+            <div className={styles.pokemonGrid}>
+              <Result
                   selectedTypes={selectedTypes}
-                  setSelectedTypes={setSelectedTypes}
-                  setSearchName={setSearchName}
+                  searchName={searchName}
+                  allPokemon={allPokemon}
+                  loading={loading}
               />
-              <div className={styles.pokemonGrid}>
-                <Result
-                    selectedTypes={selectedTypes}
-                    searchName={searchName}
-                    allPokemon={allPokemon}
-                    loading={loading}
-                />
-              </div>
-              <div className={styles.pagination}>
-                {/* Your existing page number and navigation elements */}
-              </div>
-              <button onClick={handleLogout} className={styles.logoutBtn}>
-                Logout
-              </button>
             </div>
-        )}
-      </>
-  );
+            <div className={styles.pagination}>
+              {/* Your existing page number and navigation elements */}
+            </div>
+            <button onClick={handleLogout} className={styles.logoutBtn}>
+              Logout
+            </button>
+          </div>
+      )}
+    </>
+);
 }
 
 export default SearchPage;
