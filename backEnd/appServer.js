@@ -335,7 +335,7 @@ app.get(
   })
 );
 
-// 4xx Errors By Endpoint
+
 app.get(
   "/api/v1/admin/errorsByEndpoint",
   asyncWrapper(async (req, res) => {
@@ -345,6 +345,22 @@ app.get(
       { $sort: { count: -1 } },
     ]);
     res.json(errorsByEndpoint);
+  })
+);
+
+
+app.get(
+  "/api/v1/admin/recentErrors",
+  asyncWrapper(async (req, res) => {
+    const recentErrors = await apiLogModel
+      .find({
+        status: { $gte: 400 },
+      })
+      // .populate("user", "username")
+      .sort({ timestamp: -1 })
+      .limit(10);
+    console.log("recentErrors: ", recentErrors);
+    res.json(recentErrors);
   })
 );
 
