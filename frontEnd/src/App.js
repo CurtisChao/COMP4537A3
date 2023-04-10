@@ -6,6 +6,7 @@ import SearchPage from "./pages/SearchPage";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import UserContext from "./context/UserContext";
+import Report from "./pages/Report";
 
 function App() {
   const auth = useAuth();
@@ -32,6 +33,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
