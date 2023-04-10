@@ -44,26 +44,52 @@ function Login() {
     };
   
     return (
+      <div className={styles.body}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit}>
-          <h1>Login</h1>
+          <b style={{fontSize: 30, color: 'whitesmoke', paddingLeft: 130, paddingBottom: 15, color: 'blueviolet'}}>Poke Api</b>
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            style={{
+              padding: "10px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              fontSize: "16px",
+              width: "80%",
+              boxSizing: "border-box",
+              marginBottom: "10px",
+              marginLeft: "40px",
+              backgroundColor: "coral"
+            }}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{
+              padding: "10px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              fontSize: "16px",
+              width: "80%",
+              boxSizing: "border-box",
+              marginBottom: "10px",
+              marginLeft: "40px",
+              backgroundColor: "coral"
+            }}
           />
-          <button type="submit">Login</button>
-          <button type="button" onClick={handleRegisterClick}>
+          <button type="submit" style={{backgroundColor:'greenyellow', width: "80%", marginLeft: "40px"}}>
+            Login
+          </button>
+          <button type="button" style={{backgroundColor:'purple', width: "80%", marginLeft: "40px"}} onClick={handleRegisterClick}>
             Register
           </button>
         </form>
+      </div>
       </div>
     );
   }
