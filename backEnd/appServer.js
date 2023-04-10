@@ -1,11 +1,12 @@
-const mongoose = require("mongoose")
-const express = require("express")
-const { connectDB } = require("./connectDB.js")
-const { populatePokemons } = require("./populatePokemons.js")
-const { getTypes } = require("./getTypes.js")
-const { handleErr } = require("./errorHandler.js")
-const morgan = require("morgan")
-const cors = require("cors")
+const mongoose = require("mongoose");
+const express = require("express");
+const { connectDB } = require("./connectDB.js");
+const { populatePokemons } = require("./populatePokemons.js");
+const { getTypes } = require("./getTypes.js");
+const { handleErr } = require("./errorHandler.js");
+const morgan = require("morgan");
+const cors = require("cors");
+
 const apiLogModel = require("./apiLogModel.js");
 
 const {
@@ -16,24 +17,21 @@ const {
   PokemonNotFoundError,
   PokemonDuplicateError,
   PokemonNoSuchRouteError,
-  PokemonAuthError
-} = require("./errors.js")
+  PokemonAuthError,
+} = require("./errors.js");
 
-const { asyncWrapper } = require("./asyncWrapper.js")
+const { asyncWrapper } = require("./asyncWrapper.js");
 
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 dotenv.config();
 
-
-
-const app = express()
+const app = express();
 // const port = 5000
 var pokeModel = null;
 
 const start = asyncWrapper(async () => {
   await connectDB({ drop: false });
   const pokeSchema = await getTypes();
-  // pokeModel = await populatePokemons(pokeSchema);
   pokeModel = mongoose.model("pokemons", pokeSchema);
 
   app.listen(process.env.pokeServerPORT, (err) => {
@@ -60,7 +58,6 @@ app.use(cors());
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
-// const { findOne } = require("./userModel.js")
 const userModel = require("./userModel.js");
 
 // app.use(morgan("tiny"))
@@ -148,7 +145,6 @@ app.post(
   })
 );
 
-
 app.post(
   "/requestNewAccessToken",
   asyncWrapper(async (req, res) => {
@@ -200,11 +196,6 @@ app.post(
   })
 );
 
-// app.use(morgan("tiny"))
-app.use(morgan(":method"))
-
-app.use(cors())
-
 app.post(
   "/login",
   asyncWrapper(async (req, res) => {
@@ -243,16 +234,12 @@ app.post(
       "authorization",
       `Bearer ${accessToken} Refresh ${refreshToken}`
     );
-
-    // res.send("All good!")
     res.send(user);
   })
 );
 
 app.use(authUser);
 app.use(logApiUsage);
-
-app.use(authUser) // Boom! All routes below this line are protected
 
 app.post(
   "/logout",
@@ -276,26 +263,16 @@ app.get(
     // try {
     const docs = await pokeModel.find({}).sort({ id: 1 });
     res.json(docs);
-    // } catch (err) { res.json(handleErr(err)) }
   })
 );
-
-app.get("*", (req, res) => {
-  res.json({
-    msg: "Improper route. Check API docs plz."
-  })
-  throw new PokemonNoSuchRouteError("");
-})
 
 app.use(authAdmin);
 
 app.use(handleErr);
 
-
 app.get(
   "/api/v1/admin/uniqueUsers",
   asyncWrapper(async (req, res) => {
-    // const { start, end } = req.query;
     const allLogs = await apiLogModel.find({});
     const uniqueUsers = [...new Set(allLogs.map((log) => log.user))];
     res.json(uniqueUsers);
@@ -308,9 +285,6 @@ app.get(
     // const { start, end } = req.query;
     const topUsers = await apiLogModel
       .aggregate([
-        // {
-        //   $match: { timestamp: { $gte: new Date(start), $lte: new Date(end) } },
-        // },
         { $group: { _id: "$user", count: { $sum: 1 } } },
         { $sort: { count: -1 } },
       ])
@@ -335,7 +309,6 @@ app.get(
   })
 );
 
-
 app.get(
   "/api/v1/admin/errorsByEndpoint",
   asyncWrapper(async (req, res) => {
@@ -348,7 +321,6 @@ app.get(
   })
 );
 
-
 app.get(
   "/api/v1/admin/recentErrors",
   asyncWrapper(async (req, res) => {
@@ -356,6 +328,7 @@ app.get(
       .find({
         status: { $gte: 400 },
       })
+      // .populate("user", "username")
       .sort({ timestamp: -1 })
       .limit(10);
     console.log("recentErrors: ", recentErrors);
@@ -363,5 +336,4 @@ app.get(
   })
 );
 
-app.use(handleErr)
 module.exports = app;
