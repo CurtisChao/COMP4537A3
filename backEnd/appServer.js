@@ -32,6 +32,7 @@ var pokeModel = null;
 const start = asyncWrapper(async () => {
   await connectDB({ drop: false });
   const pokeSchema = await getTypes();
+  // pokeModel = await populatePokemons(pokeSchema);
   pokeModel = mongoose.model("pokemons", pokeSchema);
 
   app.listen(process.env.pokeServerPORT, (err) => {
@@ -58,6 +59,7 @@ app.use(cors());
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
+// const { findOne } = require("./userModel.js")
 const userModel = require("./userModel.js");
 
 // app.use(morgan("tiny"))
@@ -196,6 +198,43 @@ app.post(
   })
 );
 
+// app.post(
+//   "/login",
+//   asyncWrapper(async (req, res) => {
+//     const { username, password } = req.body;
+//     console.log("username: ", username);
+//     const user = await userModel.findOne({ username });
+//     console.log("user: ", user);
+//     if (!user) throw new PokemonAuthError("User not found");
+
+//     const isPasswordCorrect = await bcrypt.compare(password, user.password);
+//     if (!isPasswordCorrect) throw new PokemonAuthError("Password is incorrect");
+
+//     const accessToken = jwt.sign(
+//       { user: user },
+//       process.env.ACCESS_TOKEN_SECRET,
+//       { expiresIn: "10s" }
+//     );
+//     const refreshToken = jwt.sign(
+//       { user: user },
+//       process.env.REFRESH_TOKEN_SECRET
+//     );
+
+//     await userModel.updateOne(
+//       { username: user.username },
+//       { token: refreshToken, token_invalid: false }
+//     );
+
+//     res.header(
+//       "authorization",
+//       `Bearer ${accessToken} Refresh ${refreshToken}`
+//     );
+
+//     // res.send("All good!")
+//     res.send(user);
+//   })
+// );
+
 app.post(
   "/login",
   asyncWrapper(async (req, res) => {
@@ -234,6 +273,8 @@ app.post(
       "authorization",
       `Bearer ${accessToken} Refresh ${refreshToken}`
     );
+
+    // res.send("All good!")
     res.send(user);
   })
 );
@@ -263,28 +304,40 @@ app.get(
     // try {
     const docs = await pokeModel.find({}).sort({ id: 1 });
     res.json(docs);
+    // } catch (err) { res.json(handleErr(err)) }
   })
 );
 
 app.use(authAdmin);
 
+// app.get("/report", (req, res) => {
+//   console.log("Report requested");
+//   res.send(`Table ${req.query.id}`);
+// });
+
 app.use(handleErr);
 
+// Get all users
 app.get(
   "/api/v1/admin/uniqueUsers",
   asyncWrapper(async (req, res) => {
+    // const { start, end } = req.query;
     const allLogs = await apiLogModel.find({});
     const uniqueUsers = [...new Set(allLogs.map((log) => log.user))];
     res.json(uniqueUsers);
   })
 );
 
+// Top API users over a period of time
 app.get(
   "/api/v1/admin/topUsers",
   asyncWrapper(async (req, res) => {
     // const { start, end } = req.query;
     const topUsers = await apiLogModel
       .aggregate([
+        // {
+        //   $match: { timestamp: { $gte: new Date(start), $lte: new Date(end) } },
+        // },
         { $group: { _id: "$user", count: { $sum: 1 } } },
         { $sort: { count: -1 } },
       ])
@@ -293,6 +346,7 @@ app.get(
   })
 );
 
+// Top users for each endpoint
 app.get(
   "/api/v1/admin/topUsersPerEndpoint",
   asyncWrapper(async (req, res) => {
@@ -309,6 +363,7 @@ app.get(
   })
 );
 
+// 4xx Errors By Endpoint
 app.get(
   "/api/v1/admin/errorsByEndpoint",
   asyncWrapper(async (req, res) => {
@@ -321,6 +376,7 @@ app.get(
   })
 );
 
+// Recent 4xx/5xx Errors
 app.get(
   "/api/v1/admin/recentErrors",
   asyncWrapper(async (req, res) => {
