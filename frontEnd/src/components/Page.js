@@ -28,7 +28,7 @@ function Page({ currentPokemons, selectedTypes, currentPage }) {
         />
       )}
       <div className="pokemon-list">
-        <h1>{`Page Number ${currentPage}`}</h1>
+        <h1 style={{paddingLeft:550, color: "black", fontSize:60}}>{`Page Number ${currentPage}`}</h1>
         <div className={styles.pokemonList}>
           {currentPokemons.map((item) => {
             if (selectedTypes.every((type) => item.type.includes(type)))

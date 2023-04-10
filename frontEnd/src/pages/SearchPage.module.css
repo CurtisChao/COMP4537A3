@@ -2,18 +2,64 @@ body {
   background-image: url("../../public/main.jpg");
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
   
   .logoutBtn {
     background-color: #f44336;
     border: none;
-    color: white;
-    padding: 15px 32px;
+    color: black;
+    padding: 10px 20px;
     text-align: center;
-    text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 20px;
+  }
+
+  .searchBtn {
+    background-color: #3652f4;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    padding-top: 20;
+  }
+
+  .container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    padding-top: 20;
+    position:absolute;
+  }
+
+  .container2 {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    padding-top: 20;
+  }
+
+  .search {
+    padding-left: 10;
   }

@@ -3,7 +3,7 @@ import Pagination from "./Pagination";
 import { useState } from "react";
 import { useEffect } from "react";
 import Page from "./Page";
-
+import styles from "./Result.module.css";
 
 function Result({ selectedTypes, searchName, allPokemon }) {
     const [pokemons, setPokemons] = useState([]);
@@ -56,11 +56,26 @@ function Result({ selectedTypes, searchName, allPokemon }) {
         currentPokemons={currentPokemons}
         currentPage={currentPage}
       />
+      <div    
+        style={{
+        padding: "10px",
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+        fontSize: "16px",
+        width: "94%",
+        boxSizing: "border-box",
+        marginBottom: "10px",
+        marginTop: "10px",
+        marginLeft: "40px",
+        backgroundColor: "coral"
+        }}>
       <Pagination
         numberOfPages={numberOfPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        className={styles.pagination}
       />
+      </div>
     </>
   );
 }

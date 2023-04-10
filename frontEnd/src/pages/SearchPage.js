@@ -50,15 +50,16 @@ function SearchPage() {
       {loading ? (
           <p>Loading...</p>
       ) : (
-          <div className={styles.container}>
+        <div className={styles.body}>
+          <div>
+          <div className={styles.container2}>
             {localStorage.getItem("role") === "admin" && (
-                <button onClick={() => navigate("/report")}>Report</button>
+                <button onClick={() => navigate("/report")} className={styles.searchBtn}>Report</button>
             )}
-            <Search
-                selectedTypes={selectedTypes}
-                setSelectedTypes={setSelectedTypes}
-                setSearchName={setSearchName}
-            />
+            <button onClick={handleLogout} className={styles.logoutBtn}>
+              Logout
+            </button>
+          </div>
             <div className={styles.pokemonGrid}>
               <Result
                   selectedTypes={selectedTypes}
@@ -67,12 +68,16 @@ function SearchPage() {
                   loading={loading}
               />
             </div>
-            <div className={styles.pagination}>
-              {/* Your existing page number and navigation elements */}
+            <div className={styles.container}>
+            <Search
+                selectedTypes={selectedTypes}
+                setSelectedTypes={setSelectedTypes}
+                setSearchName={setSearchName}
+            />
+            <div className={styles.container1}>
             </div>
-            <button onClick={handleLogout} className={styles.logoutBtn}>
-              Logout
-            </button>
+            </div>
+          </div>
           </div>
       )}
     </>
