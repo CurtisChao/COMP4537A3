@@ -1,7 +1,8 @@
 body {
-    background-size: cover;
-    background-position: center;
-  }
+  background-image: url("../../public/main.jpg");
+  background-size: cover;
+  background-position: center;
+}
   
   .logoutBtn {
     background-color: #f44336;

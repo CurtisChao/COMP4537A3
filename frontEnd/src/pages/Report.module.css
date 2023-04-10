@@ -1,0 +1,22 @@
+.body {
+    background-size: cover;
+    background-position: center;
+    background-image: url("../../public/data.jpg");
+    display: grid;
+    grid-template-columns: 10;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.lower {
+    grid-column: 2;
+    width:100vh;
+}
+
+.lower2 {
+    background-color: wheat;
+    height:120vh;
+    position: center;
+    padding-left:50px;
+}

@@ -21,6 +21,7 @@
     background-size:contain;
     border-radius: 25px;
     padding-bottom: 20px;
+    border-style:solid;
   }
   .container input {
     margin-bottom: 10px;

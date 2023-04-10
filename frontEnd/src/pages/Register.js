@@ -39,24 +39,57 @@ function Register() {
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit}>
-        <h1>Register</h1>
+      <b style={{fontSize: 30, paddingLeft: 130, paddingBottom: 15, color: 'black'}}>Register</b>
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          style={{
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            fontSize: "16px",
+            width: "80%",
+            boxSizing: "border-box",
+            marginBottom: "10px",
+            marginLeft: "40px",
+            backgroundColor: "coral"
+          }}
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={{
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            fontSize: "16px",
+            width: "80%",
+            boxSizing: "border-box",
+            marginBottom: "10px",
+            marginLeft: "40px",
+            backgroundColor: "coral"
+          }}
         />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={{
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            fontSize: "16px",
+            width: "80%",
+            boxSizing: "border-box",
+            marginBottom: "10px",
+            marginLeft: "40px",
+            backgroundColor: "coral"
+          }}
         />
         <button type="submit">Register</button>
         <button type="button" onClick={handleLoginClick}>

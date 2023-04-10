@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MyTable from "../components/MyTable";
-
 import BarChart from "../components/BarChart";
+import styles from "./Report.module.css"
 
 function Report() {
   const [data, setData] = useState([]);
@@ -99,22 +99,27 @@ function Report() {
 
   return (
     <>
-      <button onClick={handleUniqueUsers}>Unique API users</button>
-      <button onClick={handleTopUsers}>Top API users</button>
-      <button onClick={handleTopUsersPerEndpoint}>
-        Top users per endpoint
+    <div className={styles.body}>
+      <div>
+      <button onClick={handleUniqueUsers} style={{height:60, backgroundColor:'red'}}>Unique Users</button>
+      <button onClick={handleTopUsers} style={{height:60}}>Top Users</button>
+      <button onClick={handleTopUsersPerEndpoint} style={{height:60, backgroundColor:'red'}}>
+        Top Users for Endpoints
       </button>
-      <button onClick={handle4xxErrorByEndpoint}>4xx Error By Endpoint</button>
-      <button onClick={handleRecent4xx5xxErrors}>Recent 4xx/5xx Errors</button>
-
+      <button onClick={handle4xxErrorByEndpoint} style={{height:60}}>4xx Errors By Endpoint</button>
+      <button onClick={handleRecent4xx5xxErrors} style={{height:60, backgroundColor:'red'}}>Recent 4xx/5xx Errors</button>
+      </div>
+      <div className={styles.lower2}>
       {data && <div>{data.join(", ")}</div>}
       {Object.keys(barChartData).length > 0 && (
         <>
           <BarChart data={barChartData} title={title} />
         </>
       )}
-      {tableData.length > 0 && <MyTable heads={thead} rows={tableData} />}
+      {tableData.length > 0 && <MyTable heads={thead} rows={tableData} styles={{color:'black'}}/>}
       {/* <BarChart data={barChartData} title={title} /> */}
+      </div>
+    </div>
     </>
   );
 }

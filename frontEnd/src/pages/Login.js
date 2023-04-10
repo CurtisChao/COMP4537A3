@@ -47,7 +47,7 @@ function Login() {
       <div className={styles.body}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit}>
-          <b style={{fontSize: 30, color: 'whitesmoke', paddingLeft: 130, paddingBottom: 15, color: 'blueviolet'}}>Poke Api</b>
+          <b style={{fontSize: 30, paddingLeft: 130, paddingBottom: 15, color: 'black'}}>Poke Api</b>
           <input
             type="text"
             placeholder="Username"
