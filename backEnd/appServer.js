@@ -356,7 +356,6 @@ app.get(
       .find({
         status: { $gte: 400 },
       })
-      // .populate("user", "username")
       .sort({ timestamp: -1 })
       .limit(10);
     console.log("recentErrors: ", recentErrors);
